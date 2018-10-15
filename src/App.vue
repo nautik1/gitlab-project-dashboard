@@ -1,0 +1,39 @@
+<template>
+  <v-app>
+    <v-toolbar
+      app
+    >
+      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <v-content>
+      <MainPage/>
+    </v-content>
+    <v-footer app>
+      <span>&copy; 2017</span>
+    </v-footer>
+  </v-app>
+</template>
+
+<script>
+import MainPage from './components/MainPage'
+
+export default {
+  name: 'App',
+  components: {
+    MainPage
+  },
+  data () {
+    return {
+      items: [{
+        icon: 'bubble_chart',
+        title: 'Inspire'
+      }],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Gitlab project dashboard'
+    }
+  }
+}
+</script>
