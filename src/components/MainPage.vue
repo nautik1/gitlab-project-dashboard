@@ -1,7 +1,20 @@
 <template>
   <v-container fluid>
+    <v-form v-if="!gitlabURL || !userPrivateToken">
+      <v-text-field
+        v-model="gitlabURL"
+        label="Gitlab instance URL"
+        required
+      ></v-text-field>
+      <v-text-field
+        v-model="userPrivateToken"
+        label="User private token"
+        required
+      ></v-text-field>
+    </v-form>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
+        <p>Projects grabbed: {{ projectsCount }}</p>
         <ProgressChart :data="progressData" :width="700" />
       </v-layout>
     </v-slide-y-transition>
@@ -19,6 +32,7 @@ export default {
   },
   data () {
     return {
+      myGitLabData: {},
       progressData: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
@@ -35,7 +49,19 @@ export default {
         ]
       }
     }
+  },
+  mounted: function () {
+    this.GitLabAPI.get('projects', {}, [this.myGitLabData, 'projects'])
+  },
+  computed: {
+    projectsCount: function () {
+      if (this.myGitLabData.projects) {
+        return this.myGitLabData.projects.length
+      }
+      return 'none yet...'
+    }
   }
+
 }
 </script>
 
