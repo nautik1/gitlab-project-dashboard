@@ -1,21 +1,12 @@
 <template>
   <v-container fluid>
-    <v-form v-if="!gitlabURL || !userPrivateToken">
-      <v-text-field
-        v-model="gitlabURL"
-        label="Gitlab instance URL"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="userPrivateToken"
-        label="User private token"
-        required
-      ></v-text-field>
-    </v-form>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
-        <p>Projects grabbed: {{ projectsCount }}</p>
-        <ProgressChart :data="progressData" :width="700" />
+        <GitlabParametersForm v-if="!paramsValid"/>
+        <div v-if="paramsValid">
+          <p>Projects grabbed: {{ projectsCount }}</p>
+          <ProgressChart :data="progressData" :width="700" />
+        </div>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
@@ -23,16 +14,18 @@
 
 <script>
 import ProgressChart from './ProgressChart.js'
+import GitlabParametersForm from './GitlabParametersForm'
 
 export default {
   name: 'MainPage',
-  components: { ProgressChart },
+  components: { ProgressChart, GitlabParametersForm },
   props: {
     msg: String
   },
   data () {
     return {
       myGitLabData: {},
+      paramsValid: false,
       progressData: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
