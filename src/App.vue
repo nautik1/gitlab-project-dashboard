@@ -5,9 +5,16 @@
     >
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-toolbar-items v-if="gitlabUrl">
+        <v-btn flat>
+          <v-icon left>dns</v-icon>
+          {{gitlabUrl}}
+          <v-icon right>create</v-icon>
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
-      <MainPage/>
+      <MainPage v-on:updateUrl="updateUrl" :activateForm="activateForm"/>
     </v-content>
     <v-footer app>
       <span>&copy; 2017</span>
@@ -25,7 +32,18 @@ export default {
   },
   data () {
     return {
-      title: 'Gitlab project dashboard'
+      title: 'Gitlab project dashboard',
+      gitlabUrl: ''
+    }
+  },
+  methods: {
+    updateUrl (gitlabUrl) {
+      this.gitlabUrl = gitlabUrl.split('/')[2]
+    }
+  },
+  computed: {
+    activateForm () {
+      return !this.gitlabUrl
     }
   }
 }

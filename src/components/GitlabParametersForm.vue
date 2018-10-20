@@ -1,25 +1,23 @@
 <template>
-  <v-form v-if="!gitlabURL || !userPersonalToken">
+  <v-form>
     <v-text-field
-      v-model="gitlabURL"
+      v-model="newParams.url"
       label="Gitlab instance URL"
-      :rules="urlRules"
       required
     ></v-text-field>
     <v-text-field
-      v-model="userPersonalToken"
+      v-model="newParams.userPersonalToken"
       label="User personal token"
       required
     ></v-text-field>
     <v-text-field
       type="number"
-      v-model="projectId"
+      v-model="newParams.projectId"
       label="Project ID"
       required
     ></v-text-field>
     <v-btn
-      :disabled="!valid"
-      @click="submit"
+      @click="$emit('updateParameters', newParams)"
     >
       submit
     </v-btn>
@@ -30,15 +28,9 @@
 
 export default {
   name: 'GitlabParametersForm',
-  components: {},
-  props: {
-    gitlabUrl: String,
-    userPersonalToken: String,
-    projectId: Number
-  },
   data () {
     return {
-      
+			newParams: {}
     }
   }
 }

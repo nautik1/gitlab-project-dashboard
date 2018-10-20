@@ -2,9 +2,8 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
-        <GitlabParametersForm v-if="!paramsValid"/>
-        <div v-if="paramsValid">
-          <p>Projects grabbed: {{ projectsCount }}</p>
+        <GitlabParametersForm v-if="activateForm" v-on:updateParameters="updateParameters" />
+        <div>
           <ProgressChart :data="progressData" :width="700" />
         </div>
       </v-layout>
@@ -20,12 +19,16 @@ export default {
   name: 'MainPage',
   components: { ProgressChart, GitlabParametersForm },
   props: {
-    msg: String
+    activateForm: Boolean
   },
   data () {
     return {
-      myGitLabData: {},
-      paramsValid: false,
+      gitlabParameters: {
+        url: 'hello',
+        userPersonalToken: "12345toto",
+        projectId: 12345
+      },
+      projectsList: {},
       progressData: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
@@ -43,8 +46,14 @@ export default {
       }
     }
   },
+  methods: {
+    updateParameters (newParameters) {
+      this.gitlabParameters = newParameters;
+      this.$emit('updateUrl', newParameters.url)
+    }
+  },
   mounted: function () {
-    this.GitLabAPI.get('projects', {}, [this.myGitLabData, 'projects'])
+    this.GitLabAPI.get('projects', {}, [this.projectsList, 'projects'])
   },
   computed: {
     projectsCount: function () {
