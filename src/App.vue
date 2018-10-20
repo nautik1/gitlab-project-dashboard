@@ -3,7 +3,7 @@
     <v-toolbar
       app
     >
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-title><v-btn flat @click="reload()">{{title}}</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="gitlabUrl">
         <v-btn flat>
@@ -39,6 +39,9 @@ export default {
   methods: {
     updateUrl (gitlabUrl) {
       this.gitlabUrl = gitlabUrl.split('/')[2]
+    },
+    reload () {
+      location.href = "/";
     }
   },
   computed: {

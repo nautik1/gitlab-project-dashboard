@@ -3,7 +3,7 @@
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
         <GitlabParametersForm v-if="activateForm" v-on:updateParameters="updateParameters" />
-        <div>
+        <div v-if="!activateForm">
           <ProgressChart :data="progressData" :width="700" />
         </div>
       </v-layout>
