@@ -5,10 +5,10 @@
     >
       <v-toolbar-title><v-btn flat @click="reload()">{{title}}</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items v-if="!toggleForm && gitlabUrl">
+      <v-toolbar-items v-if="!toggleForm && gitlabHostname">
         <v-btn flat @click="toggleForm = !toggleForm">
           <v-icon left>dns</v-icon>
-          {{gitlabUrl}}
+          {{gitlabHostname}}
           <v-icon right>create</v-icon>
         </v-btn>
       </v-toolbar-items>
@@ -33,13 +33,13 @@ export default {
   data () {
     return {
       title: 'Gitlab project dashboard',
-      gitlabUrl: '',
+      gitlabHostname: '',
       toggleForm: true
     }
   },
   methods: {
     updateUrl (gitlabUrl) {
-      this.gitlabUrl = gitlabUrl.split('/')[2]
+      this.gitlabHostname = new URL(gitlabUrl).hostname
       this.toggleForm = !this.toggleForm
     },
     reload () {
