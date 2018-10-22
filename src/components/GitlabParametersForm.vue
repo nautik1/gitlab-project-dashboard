@@ -1,13 +1,8 @@
 <template>
-  <v-form>
+  <v-form @submit="submit">
     <v-text-field
       v-model="newParams.url"
       label="Gitlab instance URL"
-      required
-    ></v-text-field>
-    <v-text-field
-      v-model="newParams.userPersonalToken"
-      label="User personal token"
       required
     ></v-text-field>
     <v-text-field
@@ -16,10 +11,15 @@
       label="Project ID"
       required
     ></v-text-field>
+    <v-text-field
+      v-model="newParams.userPersonalToken"
+      label="User personal token"
+      required
+    ></v-text-field>
     <v-btn
-      @click="$emit('updateParameters', newParams)"
+      type="submit"
     >
-      submit
+      Submit
     </v-btn>
   </v-form>
 </template>
@@ -28,9 +28,21 @@
 
 export default {
   name: 'GitlabParametersForm',
+  props: {
+    gitlabVisibleParameters: Object
+  },
   data () {
     return {
-			newParams: {}
+			newParams: {
+        url: this.gitlabVisibleParameters.url,
+        projectId: this.gitlabVisibleParameters.projectId,
+      }
+    }
+  },
+  methods: {
+    submit (e) {
+      e.preventDefault()
+      return this.$emit('updateParameters', this.newParams)
     }
   }
 }
