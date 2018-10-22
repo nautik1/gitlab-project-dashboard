@@ -2,8 +2,11 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
-        <GitlabParametersForm v-if="activateForm" v-on:updateParameters="updateParameters" />
-        <div v-if="!activateForm">
+        <GitlabParametersForm 
+          :gitlabVisibleParameters="gitlabVisibleParameters"
+          v-if="toggleForm" 
+          v-on:updateParameters="updateParameters" />
+        <div v-if="!toggleForm">
           <ProgressChart :data="progressData" :width="700" />
         </div>
       </v-layout>
@@ -19,13 +22,13 @@ export default {
   name: 'MainPage',
   components: { ProgressChart, GitlabParametersForm },
   props: {
-    activateForm: Boolean
+    toggleForm: Boolean
   },
   data () {
     return {
       gitlabParameters: {
-        url: 'hello',
-        userPersonalToken: "12345toto",
+        url: 'https://gitlab.com',
+        userPersonalToken: '',
         projectId: 12345
       },
       projectsList: {},
@@ -56,6 +59,12 @@ export default {
     this.GitLabAPI.get('projects', {}, [this.projectsList, 'projects'])
   },
   computed: {
+    gitlabVisibleParameters () {
+      return {
+        url: this.gitlabParameters.url,
+        projectId: this.gitlabParameters.projectId
+      }
+    },
     projectsCount: function () {
       if (this.myGitLabData.projects) {
         return this.myGitLabData.projects.length
