@@ -6,8 +6,9 @@
           :gitlabVisibleParameters="gitlabVisibleParameters"
           v-if="toggleForm" 
           v-on:updateParameters="updateParameters" />
-        <div v-if="!toggleForm">
-          <ProgressChart :data="progressData" :width="700" />
+        <div 
+          v-if="!toggleForm">
+          <ProgressChart :data="progressData()" :width="700" />
         </div>
       </v-layout>
     </v-slide-y-transition>
@@ -17,6 +18,7 @@
 <script>
 import ProgressChart from './ProgressChart.js'
 import GitlabParametersForm from './GitlabParametersForm'
+import GitlabIssuesService from '../services/GitlabIssuesService.js'
 
 export default {
   name: 'MainPage',
@@ -31,32 +33,17 @@ export default {
         userPersonalToken: '',
         projectId: 12345
       },
-      projectsList: {},
-      progressData: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            label: 'Expected',
-            backgroundColor: '#4d94ff',
-            data: [40, 39, 10, 40, 39, 54, 40]
-          },
-          {
-            label: 'Actual',
-            backgroundColor: '#00e600',
-            data: [40, 39, 10, 40, 39, 23, 40]
-          }
-        ]
-      }
+      projectsList: {}
     }
   },
   methods: {
     updateParameters (newParameters) {
       this.gitlabParameters = newParameters;
       this.$emit('updateUrl', newParameters.url)
-    }
-  },
-  mounted: function () {
-    this.GitLabAPI.get('projects', {}, [this.projectsList, 'projects'])
+    },
+    progressData () {
+      return GitlabIssuesService.getStatisticsFromData()
+    },
   },
   computed: {
     gitlabVisibleParameters () {
