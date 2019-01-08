@@ -1,3 +1,7 @@
+# ARCHIVED
+This repository was moved to Gitlab. It won't be maitained.
+
+
 # gitlab-project-dashboard
 
 ## Project setup
